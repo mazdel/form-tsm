@@ -40,7 +40,10 @@ const Form = ({ children, id, action, method = "POST", ...moreProps }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    dispatch({
+      field: "_all",
+      error: undefined,
+    });
     setPayload(formState.fields);
   };
   useEffect(() => {
