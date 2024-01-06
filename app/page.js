@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Form, InputText, Button, ValidationInfo } from "@/components/Form";
-
+import { InputText, Button, ValidationInfo } from "@/components/Form";
+import { FormLogin } from "@/components/FormLogin";
 import brandImage from "@/public/images/logo-tsm-2022-sm.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
@@ -36,7 +36,7 @@ export default function Login() {
           id="form-body"
           className="flex flex-auto flex-col justify-start rounded-t-3xl bg-white p-3 "
         >
-          <Form action="/api/v1/session" id="form-login">
+          <FormLogin action="/api/v1/session" id="form-login">
             <div className="flex flex-col justify-around px-8 py-5">
               <div
                 id="div-username"
@@ -120,7 +120,7 @@ export default function Login() {
             <div className="flex justify-center px-8 py-5 text-sm">
               Lupa password?
             </div>
-          </Form>
+          </FormLogin>
         </div>
         <div
           id="form-footer"
