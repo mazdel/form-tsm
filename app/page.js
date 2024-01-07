@@ -42,10 +42,9 @@ export default function Login() {
                 id="div-username"
                 className="relative z-0 m-auto mb-7 flex w-full items-center rounded-full border border-violet-900 bg-transparent p-3 px-4"
               >
-                {/* TODO: fix icon getting bigger when first load  */}
                 <FontAwesomeIcon
                   icon={faUser}
-                  className="pr-2 text-violet-500 "
+                  className="h-4 pr-2 text-violet-500"
                 />
                 <InputText
                   name="username"
@@ -58,7 +57,7 @@ export default function Login() {
                   htmlFor="username"
                   className="
                   absolute -z-10 -translate-y-7 translate-x-3 scale-90 transform
-                  bg-white p-0 px-2 text-base text-violet-400 duration-200
+                  rounded-lg bg-white p-0 px-2 text-base text-violet-400 duration-200
                   peer-placeholder-shown:translate-x-5 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:bg-none 
                   peer-focus:-translate-y-7 peer-focus:translate-x-3 peer-focus:scale-90 peer-focus:bg-white peer-focus:px-2 peer-focus:text-violet-900
                   peer-placeholder-shown:lg:translate-x-6 
@@ -71,10 +70,9 @@ export default function Login() {
                 id="div-password"
                 className="relative z-0 m-auto mb-7 flex w-full items-center rounded-full border border-violet-900 bg-transparent p-3 px-4"
               >
-                {/* TODO: fix icon getting bigger when first load  */}
                 <FontAwesomeIcon
                   icon={faLock}
-                  className="pr-2 text-violet-500"
+                  className="h-4 pr-2 text-violet-500"
                 />
                 <InputText
                   name="password"
@@ -87,7 +85,7 @@ export default function Login() {
                   htmlFor="password"
                   className="
                   absolute -z-10 -translate-y-7 translate-x-3 scale-90 transform
-                  bg-white p-0 px-2 text-base text-violet-400 duration-200
+                  rounded-lg bg-white p-0 px-2 text-base text-violet-400 duration-200
                   peer-placeholder-shown:translate-x-5 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-placeholder-shown:bg-none
                   peer-focus:-translate-y-7 peer-focus:translate-x-3 peer-focus:scale-90 peer-focus:bg-white peer-focus:px-2 peer-focus:text-violet-900 
                   peer-placeholder-shown:lg:translate-x-6
