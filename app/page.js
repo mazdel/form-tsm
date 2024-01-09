@@ -18,7 +18,7 @@ export default function Login() {
         id="login-brand"
         className=" m-0 flex h-1/4 w-full items-center justify-center p-5 lg:h-2/3 lg:w-3/12 lg:rounded-3xl"
       >
-        <Image src={brandImage} alt="brand image" width={300} />
+        <Image src={brandImage} alt="brand image" width="auto" height="auto" />
       </section>
       <section
         id="login-form"

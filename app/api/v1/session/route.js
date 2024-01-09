@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
-
-import * as jwt from "jsonwebtoken";
-
 import sheetConfig from "@/configs/googleSheet";
-import globalConfig from "@/configs/global";
 import SheetAPI from "@/libs/SheetAPI";
 import SheetDataTool from "@/libs/SheetDataTool";
+import { AuthSign } from "@/libs/Auth";
 
 export async function POST(request) {
   try {
@@ -20,14 +17,11 @@ export async function POST(request) {
     const sheetObj = new SheetDataTool(rows, true);
     const userData = sheetObj.generateObject().findOne(reqBody);
     if (userData) {
-      const token = jwt.sign(
-        { username: userData.username },
-        globalConfig.secret,
-        {
-          algorithm: "RS512",
-          expiresIn: "24h",
-        },
-      );
+      const token = await AuthSign({
+        homePath: "/machines",
+        username: userData.username,
+      });
+
       const result = {
         username: userData.username,
         token,
@@ -36,9 +30,12 @@ export async function POST(request) {
 
       return NextResponse.json({ result }, { status: 200 });
     }
-    return NextResponse.json({ message: "user not found" }, { status: 404 });
+    return NextResponse.json(
+      { error: { message: "user not found" } },
+      { status: 404 },
+    );
   } catch (error) {
     console.log(error);
-    return NextResponse.json(error, { status: 500 });
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
