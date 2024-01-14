@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { InputText, Button, ValidationInfo } from "@/components/Form";
 import { FormLogin } from "@/components/FormLogin";
+import { CurvedBackground } from "@/components/CurvedBackground";
 import brandImage from "@/public/images/logo-tsm-2022-sm.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
@@ -13,30 +14,57 @@ export const metadata = {
 
 export default function Login() {
   return (
-    <main className="min-w-screen relative flex h-svh flex-col items-center justify-between bg-violet-700 lg:h-screen lg:flex-row lg:justify-center lg:bg-violet-900">
+    <main
+      className="
+        min-w-screen relative flex h-svh flex-col items-center justify-between bg-gradient-to-br from-violet-900 to-fuchsia-500 
+        md:h-screen md:justify-center md:bg-gradient-to-br md:from-violet-900 md:to-fuchsia-600 
+        lg:flex-row"
+    >
       <section
         id="login-brand"
-        className=" m-0 flex h-1/4 w-full items-center justify-center p-5 lg:h-2/3 lg:w-3/12 lg:rounded-3xl"
+        className="m-0 flex h-1/4 w-full items-center justify-center overflow-hidden 
+        p-5 md:w-3/4 
+        md:rounded-3xl lg:relative lg:h-2/3 lg:w-3/12 lg:rounded-e-none lg:bg-white lg:shadow-[-7px_10px_15px_-3px_rgba(0,0,0,0.1)]"
       >
-        <Image src={brandImage} alt="brand image" width="auto" height="auto" />
+        <Image
+          src={brandImage}
+          // placeholder="blur"
+          priority={false}
+          alt="brand image"
+          width="auto"
+          height="auto"
+          className="lg:absolute lg:z-10 lg:p-8"
+        />
+        <CurvedBackground
+          id="curved"
+          className="hidden h-full w-full bg-transparent lg:absolute lg:z-0 lg:grid lg:auto-cols-max"
+          bgClassName="bg-white"
+          fgClassName="bg-violet-900"
+        />
       </section>
       <section
         id="login-form"
-        className="m-0 flex h-3/4 w-full flex-col rounded-b-none rounded-t-3xl bg-violet-50 text-violet-900 lg:h-2/3 lg:max-h-screen lg:w-3/12 lg:rounded-3xl"
+        className="m-0 flex h-3/4 w-full flex-col overflow-hidden rounded-b-none rounded-t-3xl bg-violet-50 
+        text-violet-900 md:h-2/3 md:w-3/4
+        md:rounded-3xl lg:h-2/3 lg:max-h-screen lg:w-3/12 lg:rounded-s-none lg:bg-white lg:shadow-lg"
       >
         <div
           id="form-header"
-          className="my-3 flex-initial rounded-t-3xl p-2 text-violet-700"
+          className="my-3 flex-initial p-2 text-violet-700 lg:mb-1 lg:mt-20"
         >
-          <h1 className="text-center text-2xl font-extrabold">
-            Selamat datang,
+          <h1 className="text-center text-2xl font-extrabold lg:text-4xl">
+            Selamat datang
           </h1>
         </div>
         <div
           id="form-body"
-          className="flex flex-auto flex-col justify-start rounded-t-3xl bg-white p-3 "
+          className="flex flex-auto flex-col rounded-t-3xl bg-white p-3 "
         >
-          <FormLogin action="/api/v1/session" id="form-login">
+          <FormLogin
+            action="/api/v1/session"
+            id="form-login"
+            className="flex h-full flex-col justify-around"
+          >
             <div className="flex flex-col justify-around px-8 py-5">
               <div
                 id="div-username"
@@ -106,8 +134,11 @@ export default function Login() {
             <div id="login-btn" className="flex justify-center px-8 py-5">
               <Button
                 className="
-                  w-full rounded-full bg-violet-700 p-3 font-bold text-white
-                  hover:bg-violet-500 focus:bg-violet-500 active:bg-violet-500
+                  w-full rounded-full bg-violet-900 p-3 font-bold text-white
+                  transition-all duration-300
+                  hover:bg-gradient-to-br hover:from-violet-900 hover:to-fuchsia-500
+                  focus:bg-gradient-to-br focus:from-violet-900 focus:to-fuchsia-500
+                  active:bg-gradient-to-br active:from-violet-900 active:to-fuchsia-500
                 "
                 type="submit"
                 form="form-login"
@@ -122,7 +153,7 @@ export default function Login() {
         </div>
         <div
           id="form-footer"
-          className="flex flex-initial items-center justify-center bg-white p-2 text-sm lg:rounded-b-3xl"
+          className="flex flex-initial items-center justify-center bg-white p-2 text-sm"
         >
           <FontAwesomeIcon icon={faCopyright} className=" h-3" />{" "}
           <div id="copyright-text">
