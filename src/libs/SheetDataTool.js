@@ -41,7 +41,7 @@ class SheetDataTool {
    * Generate sheet data as an Object
    * @method
    * @instance
-   * @returns {SheetDataTool} an Array of Object type data of the sheet
+   * @returns {SheetDataTool} SheetDataTool Instance
    */
   generateObject() {
     const [headers, sheetData] = this.#generateHeaders(this.sheetData);
@@ -50,7 +50,7 @@ class SheetDataTool {
       return headers.reduce(
         (prevVal, currVal, currIndex) => ({
           ...prevVal,
-          [currVal]: row[currIndex],
+          [currVal]: row[currIndex] ?? "",
         }),
         {},
       );
@@ -62,7 +62,7 @@ class SheetDataTool {
    * Get the generated Object
    * @method
    * @instance
-   * @returns {object[]}
+   * @returns {object[]} an Array of Object type data of the sheet
    */
   get() {
     return this.generatedArrayOfObject;
