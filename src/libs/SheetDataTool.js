@@ -23,9 +23,9 @@ class SheetDataTool {
   }
 
   #generateHeaders(sheetData) {
-    let headers;
+    let headers, bodyData;
     if (this.firstRowAsHeader) {
-      headers = sheetData.splice(0, 1)[0];
+      [headers, ...bodyData] = sheetData;
     } else {
       const longestRow = sheetData.reduce((prevVal, currVal) => {
         return prevVal.length >= currVal.length ? prevVal : currVal;
@@ -34,7 +34,7 @@ class SheetDataTool {
         String.fromCharCode(97 + index).toUpperCase(),
       );
     }
-    return [headers, sheetData];
+    return [headers, bodyData];
   }
 
   /**
@@ -46,18 +46,19 @@ class SheetDataTool {
   generateObject() {
     const [headers, sheetData] = this.#generateHeaders(this.sheetData);
 
-    const generatedArrayOfObject = sheetData.map((row) => {
+    const generatedArrayOfObject = sheetData.map((row, rowId) => {
       return headers.reduce(
         (prevVal, currVal, currIndex) => ({
           ...prevVal,
           [currVal]: row[currIndex] ?? "",
         }),
-        {},
+        { rowId: rowId + 1 },
       );
     });
     this.generatedArrayOfObject = generatedArrayOfObject;
     return this;
   }
+
   /**
    * Get the generated Object
    * @method
@@ -67,6 +68,15 @@ class SheetDataTool {
   get() {
     return this.generatedArrayOfObject;
   }
+
+  /**
+   * Get the generated Object
+   * @returns {object[]} an Array of Object type data of the sheet
+   */
+  get object() {
+    return this.generatedArrayOfObject;
+  }
+
   /**
    * Find all the given object within generatedObject data
    * @method
