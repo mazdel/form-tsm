@@ -1,9 +1,11 @@
+import { letterToNumber } from "@/utils/letterToNumber";
+
 /**
  * Sheet 2D Array to Object Handler
  * @class
  * @classdesc A simple tool to handle spreadsheet data as Object
- * @param {array[]} sheetData - the 2D Array of sheet data
- * @param {boolean} [firstRowAsHeader] - Treat the first row as header, default to true
+ * @param {Object} sheetData - The Sheet data Object
+ * @param {boolean} [firstRowAsHeader=true] - Treat the first row of values as header, default to true
  *
  * @method generateObject
  * @memberof SheetDataTool
@@ -14,20 +16,28 @@
 class SheetDataTool {
   /**
    * @constructor
-   * @param {array[]} sheetData - the 2D Array of sheet data
-   * @param {boolean} [firstRowAsHeader] - Treat the first row as header, default to true
+   * @param {Object} sheetData - The Sheet data Object
+   * @param {boolean} [firstRowAsHeader=true] - Treat the first row of values as header, default to true
    */
   constructor(sheetData, firstRowAsHeader = true) {
-    this.sheetData = sheetData;
+    const { values, ...sheetMetadata } = sheetData;
+    this.sheetValues = values;
+    this.metadata = sheetMetadata;
     this.firstRowAsHeader = firstRowAsHeader;
+    this.generatedArrayOfObject = [];
   }
 
-  #generateHeaders(sheetData) {
+  /**
+   * Generate object keys from values header
+   * @param {Array[]} sheetValues Sheet values
+   * @returns {Array[]}
+   */
+  #generateHeaders(sheetValues) {
     let headers, bodyData;
     if (this.firstRowAsHeader) {
-      [headers, ...bodyData] = sheetData;
+      [headers, ...bodyData] = sheetValues;
     } else {
-      const longestRow = sheetData.reduce((prevVal, currVal) => {
+      const longestRow = sheetValues.reduce((prevVal, currVal) => {
         return prevVal.length >= currVal.length ? prevVal : currVal;
       }, []);
       headers = longestRow.map((val, index) =>
@@ -36,17 +46,42 @@ class SheetDataTool {
     }
     return [headers, bodyData];
   }
+  /**
+   * Generate metadata
+   * @returns {Object}
+   */
+  #generateMetadata() {
+    const [headers] = this.#generateHeaders(this.sheetValues);
+    const columnsRange = this.metadata.range.split("!")[1].split(":");
+    const firstColumn = columnsRange[0].replace(/\d/gim, "");
+    const lastColumn = columnsRange[1].replace(/\d/gim, "");
+
+    let colNum = letterToNumber(firstColumn);
+    let columns = [];
+
+    while (colNum <= letterToNumber(lastColumn)) {
+      const colLetter = String.fromCharCode(96 + colNum).toUpperCase();
+      columns = [...columns, colLetter];
+      colNum += 1;
+    }
+    return headers.reduce(
+      (prevVal, currVal, currIndex) => {
+        return { ...prevVal, [currVal]: columns[currIndex] };
+      },
+      { rowId: 0 },
+    );
+  }
 
   /**
-   * Generate sheet data as an Object
+   * Generate sheet data as an Array of Objects
    * @method
    * @instance
    * @returns {SheetDataTool} SheetDataTool Instance
    */
   generateObject() {
-    const [headers, sheetData] = this.#generateHeaders(this.sheetData);
+    const [headers, sheetValues] = this.#generateHeaders(this.sheetValues);
 
-    const generatedArrayOfObject = sheetData.map((row, rowId) => {
+    const generatedArrayOfObject = sheetValues.map((row, rowId) => {
       return headers.reduce(
         (prevVal, currVal, currIndex) => ({
           ...prevVal,
@@ -55,7 +90,68 @@ class SheetDataTool {
         { rowId: rowId + 1 },
       );
     });
-    this.generatedArrayOfObject = generatedArrayOfObject;
+    this.generatedArrayOfObject = [
+      ...this.generatedArrayOfObject,
+      ...generatedArrayOfObject,
+    ];
+    return this;
+  }
+  /**
+   * Insert the sheet metadata to the Array of Objects
+   * @method
+   * @instance
+   * @returns {SheetDataTool} SheetDataTool Instance
+   */
+  insertMetadata() {
+    const metadata = this.#generateMetadata();
+    const keys = Object.keys(this.generatedArrayOfObject[0]);
+    const result = Object.entries(metadata).reduce((prevVal, [key, value]) => {
+      if (keys.includes(key)) {
+        return { ...prevVal, [key]: value };
+      }
+      return prevVal;
+    }, {});
+    this.generatedArrayOfObject = [result, ...this.generatedArrayOfObject];
+    return this;
+  }
+  /**
+   * Get the sheet metadata
+   * @returns {Object}
+   */
+  #getMetadata() {
+    return this.#generateMetadata();
+  }
+  /**
+   * Select columns
+   * @method
+   * @instance
+   * @param {string[]} columns Array of columns letter
+   * @returns {SheetDataTool} SheetDataTool Instance
+   */
+  select(columns) {
+    const metadata = this.#getMetadata();
+    const selected = [
+      "rowId",
+      ...columns.map((column) => {
+        let objectValueId = Object.values(metadata).findIndex(
+          (value) => value === column,
+        );
+        return Object.keys(metadata)[objectValueId];
+      }),
+    ];
+    const result = this.generatedArrayOfObject.map((objectData) => {
+      const objResult = Object.entries(objectData).reduce(
+        (prevVal, [key, value]) => {
+          if (selected.includes(key)) {
+            return { ...prevVal, [key]: value };
+          }
+          return prevVal;
+        },
+        {},
+      );
+      return objResult;
+    });
+    this.generatedArrayOfObject = result;
     return this;
   }
 
