@@ -1,6 +1,5 @@
 "use client";
 import PropTypes from "prop-types";
-// import { useEffect, useState } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { ThemeContext } from "@/contexts/ThemeContext";
 
