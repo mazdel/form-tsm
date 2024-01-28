@@ -12,7 +12,7 @@ export async function POST(request) {
       spreadsheetId: sheetConfig.sheet.id,
       range: `${sheetConfig.sheet.authTable.name}!${sheetConfig.sheet.authTable.range}`,
     });
-    const rows = response.data.values;
+    const rows = response.data;
 
     const sheetObj = new SheetDataTool(rows, true);
     const userData = sheetObj.generateObject().findOne(reqBody);
