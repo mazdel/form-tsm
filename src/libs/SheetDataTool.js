@@ -48,7 +48,7 @@ class SheetDataTool {
   }
   /**
    * Generate metadata
-   * @returns {Object}
+   * @returns {Object} {[title]: columnsLetter} formatted object result
    */
   #generateMetadata() {
     const [headers] = this.#generateHeaders(this.sheetValues);
