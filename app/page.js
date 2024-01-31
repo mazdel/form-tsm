@@ -6,6 +6,7 @@ import brandImage from "@/public/images/logo-tsm-2022-sm.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { faCopyright } from "@fortawesome/free-regular-svg-icons";
+import { ButtonForgotPassword } from "@/components/ButtonForgotPassword";
 import moment from "moment/moment";
 
 export const metadata = {
@@ -50,7 +51,7 @@ export default function Login() {
       >
         <div
           id="form-header"
-          className="my-3 flex-initial p-2 text-violet-700 lg:mb-1 lg:mt-20"
+          className="my-3 flex-initial p-2 text-violet-900 lg:mb-1 lg:mt-20"
         >
           <h1 className="text-center text-2xl font-extrabold lg:text-4xl">
             Selamat datang
@@ -146,9 +147,13 @@ export default function Login() {
                 Login
               </Button>
             </div>
-            <div className="flex justify-center px-8 py-5 text-sm">
-              Lupa password?
-            </div>
+            {/* TODO: kerjakan lupa password tooltip */}
+            <ButtonForgotPassword
+              className="relative flex justify-center text-sm"
+              buttonText={"Lupa password?"}
+            >
+              <div className="p-1">Silahkan hubungi supervisor Anda</div>
+            </ButtonForgotPassword>
           </FormLogin>
         </div>
         <div
