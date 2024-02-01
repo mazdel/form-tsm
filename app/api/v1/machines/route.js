@@ -8,8 +8,8 @@ export async function GET(request) {
     const targetSheet = sheetConfig.sheet.showTabs[0];
 
     const searchParams = request.nextUrl.searchParams;
-    const getMetadata = searchParams.get("getMetadata");
-    if (getMetadata) {
+    const getSettings = searchParams.get("getSettings");
+    if (getSettings) {
       const columns = [...targetSheet.highlights, targetSheet.groupBy].sort();
       const response = await SheetAPI().spreadsheets.values.get({
         spreadsheetId: sheetConfig.sheet.id,
@@ -76,7 +76,8 @@ export async function GET(request) {
     if (response.data.values.length) {
       const rows = new SheetDataTool(response.data, true)
         .generateObject()
-        .select(targetSheet.listRange);
+        .select(targetSheet.listRange)
+        .insertMetadata();
       const result = rows.get();
 
       return NextResponse.json(

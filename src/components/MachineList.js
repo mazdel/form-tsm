@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 
 const MachineList = ({ className, ...moreProps }) => {
   const { machinesState, dispatch } = useMachineListContext();
-  const { machines, metadata, filter, search } = machinesState;
+  const { machines, settings, filter, search } = machinesState;
   const [machineList, setMachineList] = useState(machines);
 
   useMemo(() => {
@@ -22,7 +22,7 @@ const MachineList = ({ className, ...moreProps }) => {
     dispatch({ search: { value: "", machines: [] } });
     if (activeFilter && activeFilter !== "ALL") {
       const filteredMachines = machines.filter(
-        (machine) => machine[metadata.groupBy.header] === activeFilter,
+        (machine) => machine[settings.groupBy.header] === activeFilter,
       );
       return dispatch({
         filter: { active: activeFilter, machines: filteredMachines },
@@ -40,8 +40,8 @@ const MachineList = ({ className, ...moreProps }) => {
         id="groups"
         className={`mb-2 flex flex-shrink-0 justify-around bg-inherit p-2`}
       >
-        {metadata.groupBy?.groups ? (
-          ["ALL", ...metadata.groupBy.groups].map((group, ind) => {
+        {settings.groupBy?.groups ? (
+          ["ALL", ...settings.groupBy.groups].map((group, ind) => {
             return (
               <div
                 key={ind}
@@ -76,11 +76,11 @@ const MachineList = ({ className, ...moreProps }) => {
           filter.machines.length ? "" : "animate-pulse"
         }`}
       >
-        {machineList.length && metadata.highlights?.length
+        {machineList.length && settings.highlights?.length
           ? machineList.map((machine) => {
               let { rowId, ...machineRest } = machine;
 
-              const highlights = metadata.highlights.sort(
+              const highlights = settings.highlights.sort(
                 (a, b) => a.seq - b.seq,
               );
               const presented = Object.entries(machineRest).reduce(

@@ -12,25 +12,27 @@ const MachineListProvider = ({ children }) => {
   };
   const [machinesState, dispatch] = useReducer(machineReducer, {
     machines: [],
-    metadata: [],
+    settings: [],
     filter: { active: "", machines: [] },
     search: { value: "", machines: [] },
+    metadata: {},
   });
   const [response] = useFetch("/api/v1/machines", { method: "GET" });
-  const [metaResponse] = useFetch("/api/v1/machines?getMetadata=yes", {
+  const [settingResponse] = useFetch("/api/v1/machines?getSettings=yes", {
     method: "GET",
   });
   useMemo(() => {
-    if (metaResponse.code === 200) {
-      const metadata = metaResponse.data.result;
-      return dispatch({ metadata });
+    if (settingResponse.code === 200) {
+      const settings = settingResponse.data.result;
+      return dispatch({ settings });
     }
-  }, [metaResponse, dispatch]);
+  }, [settingResponse, dispatch]);
   useMemo(() => {
     if (response.code === 200) {
-      const result = response.data.result;
+      const [metadata, ...result] = response.data.result;
       dispatch({ filter: { active: "ALL", machines: result } });
-      return dispatch({ machines: result });
+
+      return dispatch({ machines: result, metadata });
     }
   }, [response, dispatch]);
 

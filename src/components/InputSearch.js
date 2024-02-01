@@ -6,13 +6,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const InputSearch = ({ className, ...moreProps }) => {
   const { machinesState, dispatch } = useMachineListContext();
-  const { metadata, machines, search } = machinesState;
+  const { settings, machines, search } = machinesState;
 
   const handleSearch = (find) => {
     if (find) {
       const filteredMachines = machines.filter((machine) => {
-        if (metadata.highlights.length) {
-          return machine[metadata.highlights[0].title]
+        if (settings.highlights.length) {
+          return machine[settings.highlights[0].title]
             .toLowerCase()
             .includes(find.toLowerCase());
         }
