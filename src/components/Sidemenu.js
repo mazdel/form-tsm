@@ -26,36 +26,38 @@ const Sidemenu = ({ className = "" }) => {
       ${
         settings.isMenuOpen == CONSTANT.SIDEMENU.OPEN ? "right-0" : "-right-48"
       } 
-      top-0 z-50 flex h-screen w-44 flex-col justify-between bg-violet-50 p-2
-      text-violet-900 shadow-lg transition-all duration-500 dark:bg-violet-950 dark:text-white
+      top-0 z-50 flex h-screen w-44 flex-col justify-start bg-violet-50 p-2 text-violet-900
+      shadow-lg transition-all duration-500 dark:bg-violet-950 dark:text-white
       ${className}`}
     >
-      <section className="flex w-full flex-col items-center justify-start">
-        <button
-          className="self-start p-2 px-3.5 text-base"
-          onClick={() => {
-            setUp({ isMenuOpen: CONSTANT.SIDEMENU.CLOSE });
-          }}
-        >
-          <FontAwesomeIcon icon={faTimes} className="h-6 opacity-50" />
-        </button>
-        <div className="mb-3 h-24 w-24 overflow-hidden rounded-full">
-          <Image src={avatar} alt="avatar" width="auto" height="auto" />
-        </div>
-        <div className="w-full border-b border-violet-300 pb-2 text-center">
-          Hai, {user?.username ?? ""}
-        </div>
-        <ButtonLogout
-          type="button"
-          className="flex w-full items-center justify-center rounded-lg p-3 text-base"
-        >
-          <span className="mr-2 font-bold">Log Out</span>
-          <FontAwesomeIcon icon={faArrowRightFromBracket} className="h-5" />
-        </ButtonLogout>
-      </section>
-      <section className="flex justify-center">
-        <ButtonTheme />
-      </section>
+      <button
+        className="self-start p-2 px-3.5 text-base"
+        onClick={() => {
+          setUp({ isMenuOpen: CONSTANT.SIDEMENU.CLOSE });
+        }}
+      >
+        <FontAwesomeIcon icon={faTimes} className="h-6 opacity-50" />
+      </button>
+      <div id="sidebar-wrapper" className="flex h-5/6 flex-col justify-between">
+        <section className="flex w-full flex-col items-center justify-start">
+          <div className="mb-3 h-24 w-24 overflow-hidden rounded-full">
+            <Image src={avatar} alt="avatar" width="auto" height="auto" />
+          </div>
+          <div className="w-full border-b border-violet-300 pb-2 text-center">
+            Hai, {user?.username ?? ""}
+          </div>
+          <ButtonLogout
+            type="button"
+            className="flex w-full items-center justify-center rounded-lg p-3 text-base"
+          >
+            <span className="mr-2 font-bold">Log Out</span>
+            <FontAwesomeIcon icon={faArrowRightFromBracket} className="h-5" />
+          </ButtonLogout>
+        </section>
+        <section className="flex justify-center">
+          <ButtonTheme />
+        </section>
+      </div>
     </aside>
   );
 };
