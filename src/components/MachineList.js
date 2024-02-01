@@ -117,9 +117,9 @@ const MachineList = ({ className, ...moreProps }) => {
                 // TODO: onCLick div mengarah ke halaman/modal khusus pengisian form
                 <div
                   key={rowId}
-                  className={`flex h-44 w-44 cursor-pointer flex-col overflow-hidden 
-                    rounded-xl bg-gradient-to-br from-violet-900 to-fuchsia-900 
-                    p-3 text-white shadow-md transition duration-200 
+                  className={`flex h-44 w-2/6 flex-auto cursor-pointer flex-col overflow-hidden rounded-xl bg-gradient-to-br 
+                    from-violet-900 to-fuchsia-900 p-3 text-white 
+                    shadow-md transition duration-200 sm:h-44 sm:w-44 
                     dark:from-fuchsia-700 dark:to-violet-700 
                   `}
                 >
@@ -160,8 +160,8 @@ const MachineList = ({ className, ...moreProps }) => {
               return (
                 <div
                   key={idx}
-                  className="
-                  h-44 w-44 rounded-xl bg-gradient-to-br from-violet-900 to-fuchsia-500 p-2 shadow-md
+                  className=" h-44 w-2/6 flex-auto rounded-xl bg-gradient-to-br 
+                  from-violet-900 to-fuchsia-500 p-2 shadow-md sm:h-44 sm:w-44
                   dark:from-violet-700 dark:to-fuchsia-700  "
                 ></div>
               );
