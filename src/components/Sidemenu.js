@@ -13,12 +13,18 @@ import {
 import { useSettingsContext } from "@/contexts/SettingsContext";
 import avatar from "@/public/images/icon-tsmjember-ig-sm.png";
 import globalConfig from "@/configs/global";
+import { useEffect, useState } from "react";
 
 const { CONSTANT } = globalConfig;
 const Sidemenu = ({ className = "" }) => {
   const { settings, setUp } = useSettingsContext();
+  let [user, setUser] = useState({});
   const token = Cookie.get(CONSTANT.ACCESS_TOKEN);
-  const user = AuthDecode(token);
+  useEffect(() => {
+    if (token) {
+      setUser(AuthDecode(token));
+    }
+  }, [token]);
 
   return (
     <aside
