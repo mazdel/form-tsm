@@ -47,6 +47,6 @@ Popover.propTypes = {
   className: PropTypes.string,
   show: PropTypes.bool,
   setPopoverVisible: PropTypes.func,
-  buttonRef: PropTypes.object,
+  
 };
 export { Popover };
