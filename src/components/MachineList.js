@@ -1,14 +1,16 @@
 "use client";
 import PropTypes from "prop-types";
+import Link from "next/link";
 import { parseIfInt } from "@/utils/parseIfInt";
 import { useMachineListContext } from "@/contexts/MachineListContext";
 import { useMemo, useState } from "react";
+import { encrypt } from "@/utils/encryption";
 
 const MachineList = ({ className, ...moreProps }) => {
   const { machinesState, dispatch } = useMachineListContext();
   const { machines, settings, filter, search } = machinesState;
   const [machineList, setMachineList] = useState(machines);
-
+  const [loadingState, setLoadingState] = useState(machinesState.loading);
   useMemo(() => {
     let activeList = filter.machines;
     if (search.machines.length > 0) {
@@ -16,6 +18,14 @@ const MachineList = ({ className, ...moreProps }) => {
     }
     return setMachineList(activeList);
   }, [search, filter]);
+
+  useMemo(() => {
+    if (machinesState.loading.status == "error") {
+      if (machinesState.loading.code >= 300) {
+        return setLoadingState(machinesState.loading);
+      }
+    }
+  }, [machinesState.loading]);
 
   const updateFilter = (filterBy) => {
     const activeFilter = filterBy == filter.active ? "ALL" : filterBy;
@@ -33,19 +43,19 @@ const MachineList = ({ className, ...moreProps }) => {
 
   return (
     <section
-      className={` flex flex-auto flex-col bg-inherit ${className}`}
+      className={`flex flex-auto flex-col bg-inherit md:h-[80svh] md:flex-row ${className}`}
       {...moreProps}
     >
       <div
         id="groups"
-        className={`mb-2 flex flex-shrink-0 justify-around bg-inherit p-2`}
+        className={`mb-2 flex flex-shrink-0 justify-around bg-inherit p-2 md:w-1/4 md:flex-col md:justify-start lg:w-1/6`}
       >
         {settings.groupBy?.groups ? (
           ["ALL", ...settings.groupBy.groups].map((group, ind) => {
             return (
               <div
                 key={ind}
-                className="flex flex-col items-center justify-center px-2 font-semibold"
+                className="flex flex-col items-center justify-center px-2 font-semibold md:py-2"
               >
                 <button
                   className={``}
@@ -56,7 +66,7 @@ const MachineList = ({ className, ...moreProps }) => {
                 </button>
 
                 <span
-                  className={`block h-0.5 w-10 rounded-full bg-violet-900 transition-all duration-200 dark:bg-white ${
+                  className={`block h-0.5 w-10 rounded-full bg-violet-900 transition-all duration-200 md:w-full dark:bg-white ${
                     filter.active == group ? "scale-x-100" : "scale-x-0"
                   }`}
                 />
@@ -64,15 +74,16 @@ const MachineList = ({ className, ...moreProps }) => {
             );
           })
         ) : (
-          <div className="flex w-full animate-pulse items-center justify-around">
-            <span className="mx-2 h-6 w-1/2 rounded-full bg-violet-300" />
-            <span className="mx-2 h-6 w-1/2 rounded-full bg-violet-300" />
+          <div className="flex w-full flex-auto animate-pulse items-center justify-around md:flex-col md:justify-start md:gap-5">
+            <span className="mx-2 h-6 w-1/2 rounded-full bg-violet-300 px-2 md:w-full md:py-2" />
+            <span className="mx-2 h-6 w-1/2 rounded-full bg-violet-300 px-2 md:w-full md:py-2" />
+            <span className="mx-2 h-6 w-1/2 rounded-full bg-violet-300 px-2 md:w-full md:py-2" />
           </div>
         )}
       </div>
       <div
         id="cards"
-        className={`mx-2 flex flex-shrink-0 flex-wrap justify-between gap-4 bg-inherit p-2 ${
+        className={`mx-2 flex flex-shrink-0 flex-wrap justify-between gap-4 overflow-y-scroll bg-inherit p-2 md:flex-auto ${
           filter.machines.length ? "" : "animate-pulse"
         }`}
       >
@@ -113,20 +124,27 @@ const MachineList = ({ className, ...moreProps }) => {
                 { titles: [], rest: [] },
               );
 
+              const anchor = encrypt(
+                `${JSON.stringify({
+                  rowId,
+                  [presented.titles[0].key]: presented.titles[0].value,
+                })}`,
+              );
               return (
                 // TODO: onCLick div mengarah ke halaman/modal khusus pengisian form
-                <div
+                <Link
                   key={rowId}
-                  className={`flex h-44 w-2/6 flex-auto cursor-pointer flex-col overflow-hidden rounded-xl bg-gradient-to-br 
-                    from-violet-900 to-fuchsia-900 p-3 text-white 
-                    shadow-md transition duration-200 sm:h-44 sm:w-44 
-                    dark:from-fuchsia-700 dark:to-violet-700 
+                  href={`/machines/edit/${anchor}`}
+                  className={`flex h-44 w-2/6 flex-auto cursor-pointer flex-col overflow-hidden rounded-xl bg-gradient-to-br from-violet-900 
+                    to-fuchsia-900 p-3 text-white shadow-md
+                    transition duration-200 focus:scale-95 sm:h-44
+                    sm:w-44 dark:from-fuchsia-700 dark:to-violet-700
                   `}
                 >
                   {presented.titles.map((title) => {
                     if (title.seq == 0) {
                       return (
-                        <h2 key={title.seq} className="text-lg font-semibold ">
+                        <h2 key={title.seq} className="text-lg font-semibold">
                           {title.value}
                         </h2>
                       );
@@ -153,17 +171,24 @@ const MachineList = ({ className, ...moreProps }) => {
                       );
                     })}
                   </div>
-                </div>
+                </Link>
               );
             })
-          : [...Array(8).keys()].map((card, idx) => {
+          : [...Array(18).keys()].map((card, idx) => {
               return (
                 <div
                   key={idx}
-                  className=" h-44 w-2/6 flex-auto rounded-xl bg-gradient-to-br 
-                  from-violet-900 to-fuchsia-500 p-2 shadow-md sm:h-44 sm:w-44
-                  dark:from-violet-700 dark:to-fuchsia-700  "
-                ></div>
+                  className="flex h-44 w-2/6 flex-auto cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl 
+                  bg-gradient-to-br from-violet-900 to-fuchsia-900 p-3
+                  text-white shadow-md transition duration-200 focus:scale-95
+                  sm:h-44 sm:w-44 dark:from-fuchsia-700 dark:to-violet-700"
+                >
+                  <h2 className="text-lg font-semibold">
+                    {loadingState.status == "loading"
+                      ? ""
+                      : `${loadingState.status}-${loadingState.code}`}
+                  </h2>
+                </div>
               );
             })}
       </div>

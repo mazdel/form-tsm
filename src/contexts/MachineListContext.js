@@ -1,6 +1,12 @@
 "use client";
 import PropTypes from "prop-types";
-import { createContext, useContext, useReducer, useMemo } from "react";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useMemo,
+  useEffect,
+} from "react";
 import { useFetch } from "@/hooks/useFetch";
 export const MachineListContext = createContext({});
 
@@ -16,8 +22,9 @@ const MachineListProvider = ({ children }) => {
     filter: { active: "", machines: [] },
     search: { value: "", machines: [] },
     metadata: {},
+    loading: { status: "loading" },
   });
-  const [response] = useFetch("/api/v1/machines", { method: "GET" });
+  const [machineResponse] = useFetch("/api/v1/machines", { method: "GET" });
   const [settingResponse] = useFetch("/api/v1/machines?getSettings=yes", {
     method: "GET",
   });
@@ -27,14 +34,17 @@ const MachineListProvider = ({ children }) => {
       return dispatch({ settings });
     }
   }, [settingResponse, dispatch]);
-  useMemo(() => {
-    if (response.code === 200) {
-      const [metadata, ...result] = response.data.result;
+  useEffect(() => {
+    if (machineResponse.code === 200) {
+      const { data, ...response } = machineResponse;
+      const [metadata, ...result] = data.result;
+      dispatch({ loading: response });
       dispatch({ filter: { active: "ALL", machines: result } });
 
       return dispatch({ machines: result, metadata });
     }
-  }, [response, dispatch]);
+    return dispatch({ loading: machineResponse });
+  }, [machineResponse, dispatch]);
 
   return (
     <MachineListContext.Provider value={{ machinesState, dispatch }}>
