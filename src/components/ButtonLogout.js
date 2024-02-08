@@ -8,7 +8,7 @@ const ButtonLogout = ({ children, className, onClick, ...moreProps }) => {
 
   const handleLogout = () => {
     Cookies.remove("access_token");
-    return router.refresh();
+    return router.push("/");
   };
 
   return (
