@@ -143,11 +143,12 @@ export default function Login() {
                 "
                 type="submit"
                 form="form-login"
+                onOkChildren="Welcome"
               >
                 Login
               </Button>
             </div>
-            {/* TODO: kerjakan lupa password tooltip */}
+
             <ButtonForgotPassword
               className="relative flex justify-center text-sm"
               buttonText={"Lupa password?"}

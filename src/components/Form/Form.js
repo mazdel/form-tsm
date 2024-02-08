@@ -4,20 +4,6 @@ import PropTypes from "prop-types";
 import { useReducer, useState, useMemo } from "react";
 import { FormContext } from "@/contexts/FormContext";
 
-const formReducer = (prevState, action) => {
-  return {
-    ...prevState,
-    fields: { ...prevState.fields, [action.field]: action.value },
-    validations: {
-      ...prevState.validations,
-      [action.field]: {
-        error: action.error,
-        success: action.success,
-      },
-    },
-    state: action.state ?? prevState.state,
-  };
-};
 /**
  * A nextjs client component to handle Form
  * @component
@@ -36,10 +22,26 @@ const Form = ({
   action,
   method = "POST",
   onSuccess,
+  defaultFieldsValue = {},
   ...moreProps
 }) => {
+  const formReducer = (prevState, action) => {
+    return {
+      ...prevState,
+      fields: { ...prevState.fields, [action.field]: action.value },
+      validations: {
+        ...prevState.validations,
+        [action.field]: {
+          error: action.error,
+          success: action.success,
+        },
+      },
+      state: action.state ?? prevState.state,
+    };
+  };
+
   const [formState, dispatch] = useReducer(formReducer, {
-    fields: {},
+    fields: defaultFieldsValue ?? {},
     validations: {},
     state: { code: 0, message: "idle" },
   });
@@ -131,6 +133,7 @@ Form.propTypes = {
   action: PropTypes.string.isRequired,
   method: PropTypes.string,
   className: PropTypes.string,
+  defaultFieldsValue: PropTypes.object,
   onSuccess: PropTypes.func,
 };
 export { Form };

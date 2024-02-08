@@ -22,10 +22,19 @@ const Button = ({
   className,
   type = "button",
   onClick,
+  onOkChildren,
   ...moreProps
 }) => {
   const { formState } = useFormContext();
   const loadingIcon = <FontAwesomeIcon icon={faCircleNotch} spin />;
+
+  let childElement = children;
+  if (formState.state.message === "loading") {
+    childElement = loadingIcon;
+  }
+  if (formState.state.code === 200) {
+    childElement = onOkChildren;
+  }
 
   return (
     <button
@@ -37,7 +46,7 @@ const Button = ({
       }}
       {...moreProps}
     >
-      {formState.state.message === "loading" ? loadingIcon : children}
+      {childElement}
     </button>
   );
 };
@@ -47,6 +56,7 @@ Button.propTypes = {
   form: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  onOkChildren: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   type: PropTypes.oneOf(["button", "submit", "reset"]),
 };
 export { Button };
