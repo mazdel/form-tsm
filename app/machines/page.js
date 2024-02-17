@@ -31,7 +31,7 @@ export default async function Machines() {
             </div>
             <div id="menu-button" className="flex-initial md:order-last">
               <ButtonSidemenu className="flex w-full justify-center rounded-lg p-3 text-base hover:bg-violet-200 dark:hover:bg-purple-800">
-                <FontAwesomeIcon icon={faCogs} className=" h-5" />
+                <FontAwesomeIcon icon={faCogs} className="h-5" />
               </ButtonSidemenu>
             </div>
             <div id="search-box" className="flex-auto p-2">
@@ -51,7 +51,7 @@ export default async function Machines() {
             >
               <FontAwesomeIcon icon={faCopyright} className=" h-3" />{" "}
               <div id="copyright-text">
-                2023 - {moment().format("yyyy")}, v.2.0.0 by{" "}
+                {moment().format("yyyy")}, v.2.0.0 by{" "}
                 <a
                   href="https://github.com/mazdel"
                   className="text-violet-700 hover:underline dark:font-semibold dark:text-white"

@@ -163,7 +163,7 @@ export default function Login() {
         >
           <FontAwesomeIcon icon={faCopyright} className=" h-3" />{" "}
           <div id="copyright-text">
-            2023 - {moment().format("yyyy")}, v.2.0.0 by{" "}
+            {moment().format("yyyy")}, v.2.0.0 by{" "}
             <a
               href="https://github.com/mazdel"
               className="text-violet-700 hover:underline"
