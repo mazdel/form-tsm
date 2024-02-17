@@ -131,14 +131,13 @@ const MachineList = ({ className, ...moreProps }) => {
                 })}`,
               );
               return (
-                // TODO: onCLick div mengarah ke halaman/modal khusus pengisian form
                 <Link
                   key={rowId}
                   href={`/machines/edit/${anchor}`}
                   className={`flex h-44 w-2/6 flex-auto cursor-pointer flex-col overflow-hidden rounded-xl bg-gradient-to-br from-violet-900 
                     to-fuchsia-900 p-3 text-white shadow-md
                     transition duration-200 focus:scale-95 sm:h-44
-                    sm:w-44 dark:from-fuchsia-700 dark:to-violet-700
+                    sm:w-44 dark:from-fuchsia-800 dark:to-violet-800
                   `}
                 >
                   {presented.titles.map((title) => {

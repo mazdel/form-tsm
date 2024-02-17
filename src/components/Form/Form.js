@@ -64,36 +64,41 @@ const Form = ({
       error: undefined,
     });
 
-    const fetchResponse = await fetch(action, {
-      method: method,
-      body: JSON.stringify(formState.fields),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const fetchResponse = await fetch(action, {
+        method: method,
+        body: JSON.stringify(formState.fields),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    let result;
-    if (fetchResponse.status !== 200) {
-      if (fetchResponse.status === 504) {
-        result = await fetchResponse.text();
+      if (fetchResponse.status !== 200) throw { fetchResponse };
+
+      let result = await fetchResponse.json();
+      return setResponse({
+        code: fetchResponse.status,
+        data: result,
+        status: "success",
+      });
+    } catch (error) {
+      const { fetchResponse, ...restError } = error;
+      if (restError) {
+        console.error(restError);
+      }
+      if (fetchResponse.headers.get("Content-Type") !== "application/json") {
+        const result = await fetchResponse.text();
         return setResponse({
           code: fetchResponse.status,
           data: result,
           status: "error",
         });
       }
-      result = await fetchResponse.json();
+      const result = await fetchResponse.json();
       return setResponse({
         code: fetchResponse.status,
         data: result,
         status: "error",
       });
     }
-
-    result = await fetchResponse.json();
-    return setResponse({
-      code: fetchResponse.status,
-      data: result,
-      status: "success",
-    });
   };
 
   useMemo(() => {
@@ -105,7 +110,7 @@ const Form = ({
     if (response.code > 400 && response.code < 500) {
       dispatch({
         field: "_all",
-        error: response.data.error.message,
+        error: response.data.error?.message,
       });
     }
     return dispatch({

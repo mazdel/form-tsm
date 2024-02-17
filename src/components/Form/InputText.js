@@ -60,6 +60,7 @@ InputText.propTypes = {
     "time",
     "email",
     "url",
+    "hidden",
   ]),
   defaultValue: PropTypes.string,
   onChange: PropTypes.func,
