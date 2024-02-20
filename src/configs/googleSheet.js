@@ -9,10 +9,16 @@ const sheetConfig = {
         listRange: ["B", "D", "F", "H"],
         groupBy: "D",
         highlights: ["B"],
-        editable: [
-          { column: "F", type: "number" },
-          { column: "H", type: "number" },
-        ],
+        edit: {
+          ranges: ["B", "A", "C", "E", "F", "G", "H", "M"],
+          rules: [
+            { column: "F", spec: "input", type: "number", min: "E" },
+            { column: "H", spec: "input", type: "number", min: "G" },
+            { column: "M", spec: "input", type: "text" },
+            { column: "B", spec: "heading", type: "h2" },
+            { column: "A", spec: "heading", type: "h3" },
+          ],
+        },
       },
     ],
   },
