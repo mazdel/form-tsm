@@ -21,7 +21,7 @@ export default async function Machines() {
 
   return (
     user && (
-      <main className="min-w-screen flex min-h-svh flex-col bg-violet-50 text-violet-900 transition-colors duration-500 dark:bg-violet-950 dark:text-white">
+      <main className="min-w-screen relative z-0 flex min-h-svh flex-col bg-violet-50 text-violet-900 transition-colors duration-500 dark:bg-violet-950 dark:text-white">
         <MachineListProvider>
           <header className="sticky top-0 z-10 flex flex-initial flex-wrap items-center justify-between bg-inherit p-3 pt-8 md:static">
             <div id="title" className="flex-initial p-2">

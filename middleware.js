@@ -40,7 +40,9 @@ export async function middleware(request) {
       expires: moment.unix(verifiedToken.exp).toDate(),
     });
     return response;
+
   } catch (e) {
+    
     if (process.env.NODE_ENV === "development") {
       // console.error(e);
     }
