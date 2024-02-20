@@ -8,7 +8,9 @@ import {
   faFloppyDisk,
   faCheckDouble,
   faAngleLeft,
+  faCircleNotch,
 } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { ButtonSidemenu } from "@/components/ButtonSidemenu";
 import { Sidemenu } from "@/components/Sidemenu";
 import { useFetch } from "@/hooks/useFetch";
@@ -20,6 +22,35 @@ const EditMachine = ({ anchor, onClose }) => {
   const [fieldsResponse] = useFetch(`/api/v1/machines/${anchor}`, {
     method: "GET",
   });
+  const [missingContent, setMissingContent] = useState(null);
+
+  useEffect(() => {
+    let content = (
+      <div
+        className="
+      flex w-full items-center justify-center overflow-clip rounded-lg bg-white 
+      dark:bg-gradient-to-br dark:from-fuchsia-800 dark:to-violet-800
+    "
+      >
+        <FontAwesomeIcon icon={faCircleNotch} className="h-44" spin />
+      </div>
+    );
+
+    if (fieldsResponse.status == "error" && fieldsResponse.code > 200) {
+      content = (
+        <div
+          className="
+            flex w-full items-center justify-center gap-2 overflow-clip rounded-lg bg-white font-bold 
+            dark:bg-gradient-to-br dark:from-fuchsia-800 dark:to-violet-800
+          "
+        >
+          <FontAwesomeIcon icon={faCircleXmark} className="h-20" /> -{" "}
+          {fieldsResponse.code}
+        </div>
+      );
+    }
+    setMissingContent(content);
+  }, [fieldsResponse, fields]);
 
   useEffect(() => {
     if (fieldsResponse.code === 200) {
@@ -50,7 +81,7 @@ const EditMachine = ({ anchor, onClose }) => {
       </header>
       <Sidemenu />
       <section className="flex flex-auto p-2">
-        {fields && (
+        {fields ? (
           <Form
             action={`/api/v1/machines/${anchor}`}
             id={anchor}
@@ -159,6 +190,8 @@ const EditMachine = ({ anchor, onClose }) => {
               <FontAwesomeIcon icon={faFloppyDisk} className="h-4" />
             </Button>
           </Form>
+        ) : (
+          missingContent
         )}
       </section>
       <Footer />
