@@ -29,10 +29,11 @@ const EditMachine = ({ anchor, onClose }) => {
       <div
         className="
       flex w-full items-center justify-center overflow-clip rounded-lg bg-white 
+      md:w-2/3 xl:w-1/3
       dark:bg-gradient-to-br dark:from-fuchsia-800 dark:to-violet-800
     "
       >
-        <FontAwesomeIcon icon={faCircleNotch} className="h-44" spin />
+        <FontAwesomeIcon icon={faCircleNotch} className="h-36" spin />
       </div>
     );
 
@@ -41,6 +42,7 @@ const EditMachine = ({ anchor, onClose }) => {
         <div
           className="
             flex w-full items-center justify-center gap-2 overflow-clip rounded-lg bg-white font-bold 
+            md:w-2/3 xl:w-1/3
             dark:bg-gradient-to-br dark:from-fuchsia-800 dark:to-violet-800
           "
         >
@@ -80,7 +82,8 @@ const EditMachine = ({ anchor, onClose }) => {
         </ButtonSidemenu>
       </header>
       <Sidemenu />
-      <section className="flex flex-auto p-2">
+
+      <section className="flex flex-auto justify-center p-2">
         {fields ? (
           <Form
             action={`/api/v1/machines/${anchor}`}
@@ -88,6 +91,7 @@ const EditMachine = ({ anchor, onClose }) => {
             method="PATCH"
             className="
                 flex w-full flex-col justify-between overflow-hidden rounded-lg bg-white p-3 shadow-sm 
+                md:w-2/3 xl:w-1/3
                 dark:bg-gradient-to-br dark:from-fuchsia-800 dark:to-violet-800
               "
             defaultFieldsValue={fields.inputState}
