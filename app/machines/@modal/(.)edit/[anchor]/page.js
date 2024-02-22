@@ -6,9 +6,16 @@ import sheetConfig from "@/configs/googleSheet";
 import EditMachine from "@/components/EditMachine";
 import Modal from "@/components/Modal";
 import { useRef } from "react";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function Edit({ params }) {
   const modalRef = useRef(null);
+
+  const [needUpdate, setNeedUpdate] = useLocalStorage(
+    "machineListNeedUpdate",
+    "false",
+  );
+
   try {
     const anchor = params.anchor;
     const anchoredData = JSON.parse(decrypt(anchor));
@@ -30,6 +37,9 @@ export default function Edit({ params }) {
             onClose={() => {
               if (modalRef.current?.open) {
                 modalRef.current?.close();
+              }
+              if (JSON.parse(needUpdate) == false) {
+                setNeedUpdate("true");
               }
             }}
           />
