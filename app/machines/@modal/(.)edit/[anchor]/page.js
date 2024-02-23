@@ -28,7 +28,7 @@ export default function Edit({ params }) {
       <Modal
         ref={modalRef}
         className={`
-          flex min-h-screen w-full max-w-full bg-violet-50 p-0 pt-5 text-violet-900 transition-colors duration-500
+          flex min-h-screen w-full max-w-full bg-violet-50 p-0 pt-5 text-violet-900 transition-colors duration-500 xl:pt-0
           dark:bg-violet-950 dark:text-white`}
       >
         {
