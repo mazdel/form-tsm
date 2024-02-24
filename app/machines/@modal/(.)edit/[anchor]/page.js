@@ -6,7 +6,6 @@ import sheetConfig from "@/configs/googleSheet";
 import EditMachine from "@/components/EditMachine";
 import Modal from "@/components/Modal";
 import { useRef } from "react";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export default function Edit({ params }) {
   const modalRef = useRef(null);
