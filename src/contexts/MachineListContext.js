@@ -8,7 +8,6 @@ import {
   useEffect,
 } from "react";
 import { useFetch } from "@/hooks/useFetch";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 export const MachineListContext = createContext({});
 export const useMachineListContext = () => useContext(MachineListContext);
@@ -17,10 +16,6 @@ const MachineListProvider = ({ children }) => {
   const machineReducer = (prevState, action) => {
     return { ...prevState, ...action };
   };
-  const [needUpdate, setNeedUpdate] = useLocalStorage(
-    "machineListNeedUpdate",
-    "false",
-  );
 
   const [machinesState, dispatch] = useReducer(machineReducer, {
     machines: [],
@@ -41,23 +36,24 @@ const MachineListProvider = ({ children }) => {
 
   useEffect(() => {
     // TODO : loadtime need to be optimized again
-    const intervalId = setInterval(() => {
+    const onMessageUpdate = (event) => {
+      if (
+        event.origin !== window.origin &&
+        event.source.origin !== window.origin
+      )
+        return;
+      if (!event.data.updateData) return;
       if (machineResponse.status === "loading" || machineResponse.code < 100)
-        return clearInterval(intervalId);
-
-      const directNeedUpdate =
-        JSON.parse(window.localStorage.getItem("machineListNeedUpdate")) ||
-        false;
-
-      if (JSON.parse(needUpdate) === true || directNeedUpdate === true) {
-        refreshMachineState({ update: +new Date() });
-        dispatch({ refreshing: true });
-      }
-    }, 5000);
-
-    return () => clearInterval(intervalId);
+        return;
+      refreshMachineState({ update: +new Date() });
+      dispatch({ refreshing: true });
+    };
+    window.addEventListener("message", onMessageUpdate);
+    return () => {
+      window.removeEventListener("message", onMessageUpdate);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [needUpdate, machineResponse]);
+  }, [machineResponse]);
 
   useMemo(() => {
     if (settingResponse.code === 200) {
@@ -73,8 +69,6 @@ const MachineListProvider = ({ children }) => {
       dispatch({ loading: response });
       dispatch({ refreshing: false });
       dispatch({ filter: { active: "ALL", machines: result } });
-
-      setNeedUpdate("false");
 
       return dispatch({ machines: result, metadata });
     }
