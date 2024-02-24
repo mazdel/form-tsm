@@ -49,6 +49,11 @@ const MachineListProvider = ({ children }) => {
       dispatch({ refreshing: true });
     };
     window.addEventListener("message", onMessageUpdate);
+
+    if (machineResponse.code !== 200) {
+      window.postMessage({ updateData: true });
+    }
+
     return () => {
       window.removeEventListener("message", onMessageUpdate);
     };
