@@ -18,7 +18,7 @@ const MachineList = ({ className, ...moreProps }) => {
   const cardsContainer = useRef();
   useEffect(() => {
     const container = cardsContainer.current;
-    console.log(container.offsetWidth, container.getBoundingClientRect());
+
     if (typeof window !== "undefined") {
       const cardsCount = Math.floor(
         ((container.offsetWidth - 16) * (window.innerHeight - 16)) / 176 ** 2,
@@ -192,7 +192,6 @@ const MachineList = ({ className, ...moreProps }) => {
             })
           : [...Array(skeletonCount ? skeletonCount : 20).keys()].map(
               (card, idx) => {
-                console.log(skeletonCount);
                 return (
                   <div
                     key={idx}
