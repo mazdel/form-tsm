@@ -8,6 +8,7 @@ import {
   useEffect,
 } from "react";
 import { useFetch } from "@/hooks/useFetch";
+import { delay } from "@/utils/delay";
 
 export const MachineListContext = createContext({});
 export const useMachineListContext = () => useContext(MachineListContext);
@@ -36,7 +37,8 @@ const MachineListProvider = ({ children }) => {
 
   useEffect(() => {
     // TODO : loadtime need to be optimized again
-    const onMessageUpdate = (event) => {
+    // TODO : got error timeout 504 on vercel
+    const onMessageUpdate = async (event) => {
       if (
         event.origin !== window.origin &&
         event.source.origin !== window.origin
@@ -45,8 +47,9 @@ const MachineListProvider = ({ children }) => {
       if (!event.data.updateData) return;
       if (machineResponse.status === "loading" || machineResponse.code < 100)
         return;
-      refreshMachineState({ update: +new Date() });
       dispatch({ refreshing: true });
+      await delay(5000);
+      refreshMachineState({ update: +new Date() });
     };
     window.addEventListener("message", onMessageUpdate);
 
